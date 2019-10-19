@@ -10,6 +10,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <string>
+#include <vector>
 
 #define COMMON_OPT 1
 #define COMMAND_OPT 2
@@ -152,6 +153,7 @@ public: /* the public interface */
   void printUsage();
   void printAutoUsage();
   void addUsage(const char *line);
+  void addUsage(string line);
   void printHelp();
   /* print auto usage printing for unknown options or flag */
   void autoUsagePrint(bool flag);
@@ -192,7 +194,8 @@ private:                /* the hidden data structure */
   int g_value_counter; /* globally updated value index LAME! */
 
   /* help and usage */
-  const char **usage;  /* usage */
+  //const char **usage;  /* usage */
+  std::vector<string> usage;
   int max_usage_lines; /* max usage lines reserved */
   int usage_lines;     /* number of usage lines */
 
@@ -232,7 +235,7 @@ private: /* the hidden utils */
   /* grow storage arrays as required */
   bool doubleOptStorage();
   bool doubleCharStorage();
-  bool doubleUsageStorage();
+  //bool doubleUsageStorage();
 
   bool setValue(const char *option, char *value);
   bool setFlagOn(const char *option);

@@ -156,14 +156,15 @@ bool AnyOption::alloc() {
   }
 
   size = (max_usage_lines + 1) * sizeof(const char *);
-  usage = (const char **)malloc(size);
+  //usage = (const char **)malloc(size);
+  usage = vector<string>();
 
-  if (usage == NULL) {
+  /*if (usage == NULL) {
     mem_allocated = false;
     return false;
   }
   for (i = 0; i < max_usage_lines; i++)
-    usage[i] = NULL;
+    usage[i] = NULL;*/
 
   return true;
 }
@@ -241,7 +242,7 @@ bool AnyOption::doubleCharStorage() {
   return true;
 }
 
-bool AnyOption::doubleUsageStorage() {
+/*bool AnyOption::doubleUsageStorage() {
   const char **usage_saved = usage;
   usage = (const char **)realloc(usage, ((2 * max_usage_lines) + 1) *
                                             sizeof(const char *));
@@ -253,7 +254,7 @@ bool AnyOption::doubleUsageStorage() {
     usage[i] = NULL;
   max_usage_lines = 2 * max_usage_lines;
   return true;
-}
+}*/
 
 void AnyOption::cleanup() {
   free(options);
@@ -262,7 +263,7 @@ void AnyOption::cleanup() {
   free(optionchars);
   free(optchartype);
   free(optcharindex);
-  free(usage);
+  //free(usage);
   if (values != NULL) {
     for (int i = 0; i < g_value_counter; i++) {
       free(values[i]);
@@ -976,24 +977,39 @@ void AnyOption::printAutoUsage() {
 }
 
 void AnyOption::printUsage() {
-
   if (once) {
     once = false;
     cout << endl;
-    for (int i = 0; i < usage_lines; i++)
-      cout << usage[i] << endl;
+    for(string usage_line : usage){
+      cout << usage_line << endl;
+    }
+    //for (int i = 0; i < usage_lines; i++)
+    //  cout << usage[i] << endl;
     cout << endl;
   }
 }
 
 void AnyOption::addUsage(const char *line) {
-  if (usage_lines >= max_usage_lines) {
+  /*if (usage_lines >= max_usage_lines) {
     if (doubleUsageStorage() == false) {
       addUsageError(line);
       exit(1);
     }
-  }
-  usage[usage_lines] = line;
+  }*/
+  //usage[usage_lines] = line;
+  usage.push_back(string(line));
+  usage_lines++;
+}
+
+void AnyOption::addUsage(string line) {
+  /*if (usage_lines >= max_usage_lines) {
+    if (doubleUsageStorage() == false) {
+      addUsageError(line);
+      exit(1);
+    }
+  }*/
+  //usage[usage_lines] = line;
+  usage.push_back(line);
   usage_lines++;
 }
 
